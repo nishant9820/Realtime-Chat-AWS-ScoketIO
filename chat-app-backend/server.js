@@ -9,7 +9,7 @@ const server = http.createServer(app);
 // Enable CORS for Express
 app.use(
   cors({
-    origin: "http://192.168.0.109:3000", // Allow your React app domain
+    origin: "*", // Allow all origins (for testing only; limit in production)
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
   })
@@ -18,10 +18,15 @@ app.use(
 // Initialize Socket.IO with CORS configuration
 const io = socketIo(server, {
   cors: {
-    origin: "http://192.168.0.109:3000", // Allow your React app domain
+    origin: "*", // Allow all origins (for testing only; limit in production)
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
   },
+});
+
+// Test route to confirm the server is running
+app.get("/", (req, res) => {
+  res.send("Server is running!");
 });
 
 // Event when a new user connects
@@ -30,7 +35,6 @@ io.on("connection", (socket) => {
 
   // Event to handle user message
   socket.on("message", (data) => {
-    // 'data' will now contain userName and message
     console.log(`Message received from ${data.userName}: ${data.message}`);
 
     // Broadcast message to all connected users
@@ -43,8 +47,9 @@ io.on("connection", (socket) => {
   });
 });
 
-// Run server
+// Start the server on port 4000
 const PORT = 4000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
