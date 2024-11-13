@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import "./App.css";
 
 // Connect to the Socket.IO server
-const socket = io("http://13.53.212.11:4000");
+const socket = io("http://<EC2_PUBLIC_IP>:4000");
 
 function App() {
   const [message, setMessage] = useState("");
